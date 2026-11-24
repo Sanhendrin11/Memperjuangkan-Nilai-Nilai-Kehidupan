@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuis Pilihan Ganda Kompleks – Pendidikan Agama Katolik Kelas XII</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      background: #f0f4f8;
+      color: #1a2b4c;
+      padding: 2rem 1rem;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0b2d4b;
+      letter-spacing: -0.02em;
+    }
+
+    .subhead {
+      font-size: 1rem;
+      color: #2c3e5c;
+      background: #d9e6f2;
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      border-radius: 30px;
+      margin-top: 0.6rem;
+      font-weight: 500;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 0.8rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .score-badge {
+      background: #1e3a6b;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .progress-text {
+      font-weight: 600;
+      color: #1e3a6b;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 1.8rem 1.8rem 1.8rem 1.8rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e2edf7;
+      transition: all 0.15s;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .question-number {
+      background: #0b2d4b;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.25rem 0.9rem;
+      border-radius: 40px;
+      letter-spacing: 0.3px;
+    }
+
+    .question-type {
+      font-size: 0.8rem;
+      background: #e8f0fe;
+      color: #1e4a7a;
+      padding: 0.25rem 0.9rem;
+      border-radius: 40px;
+      font-weight: 600;
+    }
+
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1.3rem;
+      color: #0b2d4b;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      background: #f9fcff;
+      padding: 0.8rem 1rem;
+      border-radius: 14px;
+      border: 1px solid #dbe8f5;
+      cursor: pointer;
+      transition: background 0.1s, border 0.1s;
+    }
+
+    .option:hover {
+      background: #edf4fc;
+      border-color: #a0c0e0;
+    }
+
+    .option input[type="checkbox"] {
+      margin-top: 0.25rem;
+      width: 1.2rem;
+      height: 1.2rem;
+      accent-color: #1e3a6b;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .option label {
+      font-size: 1rem;
+      cursor: pointer;
+      flex: 1;
+      color: #1a2b4c;
+    }
+
+    .option.correct-highlight {
+      background: #e1f5e8;
+      border-color: #2e7d32;
+    }
+
+    .option.wrong-highlight {
+      background: #ffe6e6;
+      border-color: #c62828;
+    }
+
+    .feedback {
+      margin-top: 0.8rem;
+      padding: 1rem 1.2rem;
+      border-radius: 16px;
+      background: #f4f9ff;
+      border-left: 6px solid #1e3a6b;
+      font-size: 0.95rem;
+      color: #1a2b4c;
+    }
+
+    .feedback strong {
+      color: #0b2d4b;
+    }
+
+    .btn-check {
+      background: #1e3a6b;
+      color: white;
+      border: none;
+      font-weight: 600;
+      padding: 0.6rem 1.6rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.05s;
+      letter-spacing: 0.3px;
+      box-shadow: 0 2px 6px rgba(30, 58, 107, 0.2);
+    }
+
+    .btn-check:hover {
+      background: #14315a;
+    }
+
+    .btn-check:active {
+      transform: scale(0.97);
+    }
+
+    .btn-check:disabled {
+      background: #8fa9c7;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-reset {
+      background: white;
+      color: #1e3a6b;
+      border: 2px solid #1e3a6b;
+      font-weight: 600;
+      padding: 0.6rem 1.6rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-left: 1rem;
+    }
+
+    .btn-reset:hover {
+      background: #e8f0fe;
+    }
+
+    .global-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #6b7f99;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #d4e2f0;
+    }
+
+    .empty-msg {
+      color: #b22222;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 1.2rem; }
+      .question-text { font-size: 1rem; }
+      .option label { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📖 Kuis Pilihan Ganda Kompleks</h1>
+      <div class="subhead">Pendidikan Agama Katolik & Budi Pekerti · Kelas XII · Bab II</div>
+    </header>
+
+    <div class="stats">
+      <span class="score-badge" id="scoreDisplay">Skor: 0 / 30</span>
+      <span class="progress-text" id="progressDisplay">0 soal dinilai</span>
+    </div>
+
+    <div id="quizContainer"></div>
+
+    <div class="global-actions">
+      <button class="btn-check" id="resetAllBtn">🔄 Reset Semua Jawaban</button>
+    </div>
+    <div class="footer-note">Memperjuangkan Kejujuran, Kebenaran, Perdamaian, dan Keutuhan Lingkungan Hidup</div>
+  </div>
+
+  <script>
+    (function() {
+      // ========== DATA SOAL (30 SOAL) ==========
+      const questions = [
+        // 1-8: Kejujuran & Kebenaran
+        {
+          type: 'multiple',
+          question: 'Manakah pernyataan yang termasuk bentuk ketidakjujuran dalam realitas sosial? (Pilih lebih dari satu)',
+          options: [
+            'Korupsi dana bantuan sosial',
+            'Menyebarkan hoaks di media sosial',
+            'Menyontek saat ujian',
+            'Mengakui kesalahan dengan tulus',
+            'Memberikan kesaksian palsu di pengadilan'
+          ],
+          correct: [0, 1, 2, 4],
+          explanation: 'Korupsi, hoaks, mencontek, dan kesaksian palsu adalah bentuk ketidakjujuran. Mengakui kesalahan adalah tindakan jujur.'
+        },
+        {
+          type: 'combination',
+          question: 'Perhatikan pernyataan berikut tentang ajaran Yesus mengenai integritas perkataan! (1) "Ya" berarti ya, "Tidak" berarti tidak. (2) Bersumpah demi nama Tuhan diperbolehkan asal benar. (3) Yesus mengajarkan agar perkataan kita tidak perlu berlebihan. (4) Kristus adalah Kebenaran sejati. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 2, dan 3',
+            '1 dan 3',
+            '2 dan 4',
+            '4 saja',
+            'Semua benar'
+          ],
+          correct: [1], // B. 1 dan 3
+          explanation: 'Mat 5:33-37 menekankan integritas: ya katakan ya, tidak katakan tidak. Yesus melarang sumpah berlebihan. Pernyataan (2) tidak tepat karena Yesus justru mengoreksi praktik sumpah. Yoh 14:6 menegaskan Kristus Kebenaran sejati.'
+        },
+        {
+          type: 'multiple',
+          question: 'Berdasarkan Keluaran 20:16, larangan bersaksi dusta mengandung makna ... (Pilih lebih dari satu)',
+          options: [
+            'Menjaga kebenaran dalam perkataan',
+            'Tidak memfitnah sesama',
+            'Boleh berbohong untuk kebaikan bersama',
+            'Memberikan informasi yang menyesatkan adalah dosa',
+            'Kesaksian palsu merusak keadilan'
+          ],
+          correct: [0, 1, 3, 4],
+          explanation: 'Larangan bersaksi dusta mencakup menjaga kebenaran, tidak memfitnah, tidak menyesatkan, dan tidak merusak keadilan. Berbohong untuk kebaikan bersama tetap tidak dibenarkan.'
+        },
+        {
+          type: 'cause',
+          question: 'Pernyataan: "Kecurangan akademik bertentangan dengan nilai kejujuran." Alasan: "Kecurangan akademik merusak integritas pribadi dan menciptakan ketidakadilan." Hubungan pernyataan dan alasan tersebut adalah ...',
+          options: [
+            'Pernyataan benar, alasan benar, dan keduanya berhubungan',
+            'Pernyataan benar, alasan benar, tetapi tidak berhubungan',
+            'Pernyataan benar, alasan salah',
+            'Pernyataan salah, alasan benar',
+            'Pernyataan dan alasan salah'
+          ],
+          correct: [0],
+          explanation: 'Keduanya benar dan saling berkaitan: kecurangan akademik melanggar kejujuran karena merusak integritas dan keadilan.'
+        },
+        {
+          type: 'multiple',
+          question: 'Manakah yang merupakan wujud memperjuangkan kebenaran di lingkungan sekolah? (Pilih lebih dari satu)',
+          options: [
+            'Melaporkan kecurangan ujian secara jujur',
+            'Menutupi kesalahan teman demi solidaritas',
+            'Menyampaikan informasi yang akurat',
+            'Membiarkan hoaks menyebar',
+            'Mengoreksi berita bohong dengan santun'
+          ],
+          correct: [0, 2, 4],
+          explanation: 'Memperjuangkan kebenaran berarti jujur melaporkan kecurangan, menyampaikan informasi akurat, dan mengoreksi hoaks. Menutupi kesalahan dan membiarkan hoaks adalah bentuk tidak jujur.'
+        },
+        {
+          type: 'combination',
+          question: 'Perhatikan pernyataan tentang Kristus sebagai Kebenaran! (1) Yesus berkata "Akulah jalan, kebenaran, dan hidup". (2) Roh Kudus memimpin kita pada seluruh kebenaran. (3) Kebenaran Kristus hanya untuk orang percaya. (4) Yesus mengajarkan kebenaran yang memerdekakan. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 2, dan 4',
+            '1 dan 3',
+            '2 dan 4',
+            '1, 2, 3, dan 4',
+            '3 saja'
+          ],
+          correct: [0], // A. 1,2,4
+          explanation: 'Yoh 14:6, Yoh 16:13, dan Yoh 8:32 menegaskan Kristus sebagai kebenaran yang memerdekakan. Pernyataan (3) salah karena kebenaran Kristus adalah untuk semua orang.'
+        },
+        {
+          type: 'cause',
+          question: 'Pernyataan: "Hoaks harus dilawan dengan literasi digital." Alasan: "Hoaks adalah manipulasi informasi yang merusak kebenaran dan persatuan." Hubungan yang tepat adalah ...',
+          options: [
+            'Pernyataan benar, alasan benar, dan keduanya berhubungan',
+            'Pernyataan benar, alasan benar, tetapi tidak berhubungan',
+            'Pernyataan benar, alasan salah',
+            'Pernyataan salah, alasan benar',
+            'Pernyataan dan alasan salah'
+          ],
+          correct: [0],
+          explanation: 'Hoaks merusak kebenaran dan persatuan, sehingga literasi digital menjadi cara tepat untuk melawannya. Keduanya saling terkait.'
+        },
+        {
+          type: 'multiple',
+          question: 'Ajaran Gereja tentang kejujuran menegaskan bahwa ... (Pilih lebih dari satu)',
+          options: [
+            'Kejujuran adalah fondasi hidup bermasyarakat',
+            'Kebohongan selalu diperbolehkan dalam keadaan darurat',
+            'Umat Katolik dipanggil menjadi saksi kebenaran',
+            'Korupsi adalah dosa sosial yang merugikan banyak orang',
+            'Kebenaran harus diperjuangkan dengan cara-cara yang tidak jujur'
+          ],
+          correct: [0, 2, 3],
+          explanation: 'Gereja menekankan kejujuran sebagai fondasi, panggilan menjadi saksi kebenaran, dan korupsi sebagai dosa sosial. Kebohongan tidak pernah dibenarkan, dan tujuan baik tidak menghalalkan cara tidak jujur.'
+        },
+
+        // 9-19: Keadilan & Perdamaian (11 soal)
+        {
+          type: 'multiple',
+          question: 'Manakah yang termasuk bentuk keadilan komutatif? (Pilih lebih dari satu)',
+          options: [
+            'Membayar upah pekerja sesuai kesepakatan',
+            'Memberikan bantuan kepada korban bencana',
+            'Mengembalikan barang pinjaman dengan utuh',
+            'Menghukum pelanggar hukum secara sewenang-wenang',
+            'Memenuhi kontrak kerja dengan adil'
+          ],
+          correct: [0, 2, 4],
+          explanation: 'Keadilan komutatif berkaitan dengan hubungan timbal balik antarindividu (upah, pinjaman, kontrak). Bantuan bencana lebih ke keadilan distributif, hukuman sewenang-wenang melanggar keadilan.'
+        },
+        {
+          type: 'combination',
+          question: 'Perhatikan pernyataan tentang kritik sosial Nabi Amos! (1) Amos mengecam penindasan terhadap kaum miskin. (2) Amos menentang kecurangan timbangan dalam perdagangan. (3) Amos membenarkan ketidakadilan demi kestabilan kerajaan. (4) Amos menyerukan agar keadilan mengalir seperti air. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 2, dan 4',
+            '1 dan 3',
+            '2 dan 4',
+            '4 saja',
+            'Semua benar'
+          ],
+          correct: [0],
+          explanation: 'Amos 5:7-13 mengecam penindasan dan kecurangan timbangan. Ayat 24 menyerukan keadilan mengalir seperti air. Pernyataan (3) bertentangan dengan Amos.'
+        },
+        {
+          type: 'cause',
+          question: 'Pernyataan: "Perdamaian sejati tidak dapat dipisahkan dari keadilan." Alasan: "Gaudium et Spes art. 78 menegaskan perdamaian sebagai buah keadilan dan cinta kasih." Hubungan yang tepat adalah ...',
+          options: [
+            'Pernyataan benar, alasan benar, dan keduanya berhubungan',
+            'Pernyataan benar, alasan benar, tetapi tidak berhubungan',
+            'Pernyataan benar, alasan salah',
+            'Pernyataan salah, alasan benar',
+            'Pernyataan dan alasan salah'
+          ],
+          correct: [0],
+          explanation: 'Gaudium et Spes art. 78 secara eksplisit menyatakan perdamaian adalah buah keadilan dan cinta kasih. Keduanya saling menjelaskan.'
+        },
+        {
+          type: 'multiple',
+          question: 'Makna damai Kristus menurut Yohanes 14:27 adalah ... (Pilih lebih dari satu)',
+          options: [
+            'Damai yang diberikan dunia dengan segala kemewahannya',
+            'Damai yang menenangkan hati meskipun dalam kesulitan',
+            'Damai yang membebaskan dari rasa takut',
+            'Damai yang hanya berlaku saat tidak ada konflik',
+            'Damai yang bersumber dari Kristus sendiri'
+          ],
+          correct: [1, 2, 4],
+          explanation: 'Yesus memberikan damai yang berbeda dari dunia: menenangkan hati, membebaskan dari takut, dan bersumber dari Kristus. Damai dunia sering semu, dan damai Kristus tetap ada dalam kesulitan.'
+        },
+        {
+          type: 'combination',
+          question: 'Pernyataan tentang Ensiklik Pacem in Terris! (1) Menekankan perdamaian berdasarkan kebenaran, keadilan, cinta kasih, dan kebebasan. (2) Perdamaian hanya tanggung jawab pemimpin negara. (3) Menyerukan perlucutan senjata dan dialog. (4) Mengajak semua orang berperan aktif dalam perdamaian. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 3, dan 4',
+            '1 dan 2',
+            '2 dan 4',
+            '4 saja',
+            'Semua benar'
+          ],
+          correct: [0],
+          explanation: 'Pacem in Terris (Yohanes XXIII) menekankan empat pilar perdamaian, perlucutan senjata, dialog, dan peran aktif semua orang. Pernyataan (2) salah karena perdamaian adalah tanggung jawab semua.'
+        },
+        {
+          type: 'multiple',
+          question: 'Bentuk keadilan distributif dalam masyarakat adalah ... (Pilih lebih dari satu)',
+          options: [
+            'Pemerataan akses pendidikan bagi semua warga',
+            'Pemberian subsidi tepat sasaran bagi keluarga miskin',
+            'Hukuman yang setimpal bagi pelanggar hukum',
+            'Pelayanan kesehatan yang merata di seluruh wilayah',
+            'Pemberian beasiswa bagi siswa berprestasi dari keluarga kurang mampu'
+          ],
+          correct: [0, 1, 3, 4],
+          explanation: 'Keadilan distributif berkaitan dengan pembagian sumber daya secara adil oleh negara/masyarakat. Hukuman setimpal termasuk keadilan legal/retributif.'
+        },
+        {
+          type: 'cause',
+          question: 'Pernyataan: "Fratelli Tutti menyerukan persaudaraan manusia." Alasan: "Persaudaraan sejati mengatasi batas suku, agama, dan bangsa untuk membangun perdamaian." Hubungan yang tepat adalah ...',
+          options: [
+            'Pernyataan benar, alasan benar, dan keduanya berhubungan',
+            'Pernyataan benar, alasan benar, tetapi tidak berhubungan',
+            'Pernyataan benar, alasan salah',
+            'Pernyataan salah, alasan benar',
+            'Pernyataan dan alasan salah'
+          ],
+          correct: [0],
+          explanation: 'Fratelli Tutti (Paus Fransiskus) menegaskan persaudaraan universal sebagai jalan perdamaian. Alasan menjelaskan mengapa seruan itu penting.'
+        },
+        {
+          type: 'multiple',
+          question: 'Sabda Bahagia dalam Matius 5:9 menyatakan "Berbahagialah orang yang membawa damai..." Pernyataan yang sesuai dengan makna sabda ini adalah ... (Pilih lebih dari satu)',
+          options: [
+            'Pembawa damai disebut anak-anak Allah',
+            'Perdamaian hanya tugas para pemimpin agama',
+            'Membawa damai berarti aktif menyelesaikan konflik',
+            'Damai sejati menuntut keberanian dan pengorbanan',
+            'Cukup berdiam diri saat terjadi konflik'
+          ],
+          correct: [0, 2, 3],
+          explanation: 'Mat 5:9 menegaskan pembawa damai disebut anak Allah. Membawa damai berarti aktif menyelesaikan konflik dengan keberanian dan pengorbanan. Diam saat konflik bukanlah membawa damai.'
+        },
+        {
+          type: 'combination',
+          question: 'Perhatikan pernyataan tentang keadilan legal! (1) Keadilan legal berkaitan dengan ketaatan warga pada hukum yang adil. (2) Pemerintah wajib menegakkan hukum secara adil. (3) Hukum boleh dilanggar jika menguntungkan diri sendiri. (4) Keadilan legal menuntut kepastian hukum bagi semua. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 2, dan 4',
+            '1 dan 3',
+            '2 dan 4',
+            '4 saja',
+            'Semua benar'
+          ],
+          correct: [0],
+          explanation: 'Keadilan legal menuntut ketaatan pada hukum yang adil, penegakan hukum yang adil, dan kepastian hukum. Melanggar hukum untuk keuntungan pribadi jelas salah.'
+        },
+        {
+          type: 'cause',
+          question: 'Pernyataan: "Korupsi menghambat terwujudnya keadilan sosial." Alasan: "Korupsi mengambil hak orang miskin dan merusak distribusi sumber daya." Hubungan yang tepat adalah ...',
+          options: [
+            'Pernyataan benar, alasan benar, dan keduanya berhubungan',
+            'Pernyataan benar, alasan benar, tetapi tidak berhubungan',
+            'Pernyataan benar, alasan salah',
+            'Pernyataan salah, alasan benar',
+            'Pernyataan dan alasan salah'
+          ],
+          correct: [0],
+          explanation: 'Korupsi secara langsung merampas hak orang miskin dan merusak distribusi, sehingga menghambat keadilan sosial. Keduanya berkaitan erat.'
+        },
+        {
+          type: 'multiple',
+          question: 'Nabi Amos mengecam praktik kecurangan timbangan karena ... (Pilih lebih dari satu)',
+          options: [
+            'Merugikan kaum miskin',
+            'Melanggar perintah Tuhan tentang kejujuran',
+            'Menguntungkan pedagang kaya secara tidak sah',
+            'Membuat harga barang menjadi lebih murah',
+            'Menunjukkan ketidakadilan dalam ekonomi'
+          ],
+          correct: [0, 1, 2, 4],
+          explanation: 'Amos 8:5-6 mengecam kecurangan timbangan karena merugikan orang miskin, melanggar kejujuran, menguntungkan secara tidak sah, dan merupakan ketidakadilan ekonomi. Harga murah bukan alasan pembenaran.'
+        },
+
+        // 20-30: Keutuhan Lingkungan Hidup (11 soal)
+        {
+          type: 'multiple',
+          question: 'Berdasarkan Kejadian 1:1-24, mandat penciptaan kepada manusia adalah ... (Pilih lebih dari satu)',
+          options: [
+            'Menaklukkan bumi dengan eksploitasi tanpa batas',
+            'Berkuasa atas ciptaan sebagai wakil Allah',
+            'Memelihara dan merawat keharmonisan alam',
+            'Menguasai alam untuk kepentingan generasi sekarang saja',
+            'Mengelola bumi dengan bijaksana'
+          ],
+          correct: [1, 2, 4],
+          explanation: 'Kej 1:26-28 memberikan mandat untuk berkuasa sebagai wakil Allah, memelihara, dan mengelola bumi dengan bijaksana. Eksploitasi tanpa batas dan hanya untuk generasi sekarang bertentangan dengan mandat.'
+        },
+        {
+          type: 'combination',
+          question: 'Pernyataan tentang Ensiklik Laudato Si’! (1) Mengajak pertobatan ekologis. (2) Menyebut bumi sebagai "rumah kita bersama". (3) Menganggap alam hanya sebagai sumber daya. (4) Mengkritik konsumerisme dan pencemaran. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 2, dan 4',
+            '1 dan 3',
+            '2 dan 4',
+            '4 saja',
+            'Semua benar'
+          ],
+          correct: [0],
+          explanation: 'Laudato Si’ menyerukan pertobatan ekologis, menyebut bumi rumah bersama, dan mengkritik konsumerisme serta pencemaran. Pernyataan (3) bertentangan dengan semangat ensiklik.'
+        },
+        {
+          type: 'cause',
+          question: 'Pernyataan: "Pertobatan ekologis diperlukan untuk menyelamatkan bumi." Alasan: "Laudato Si’ menegaskan krisis ekologi adalah krisis moral dan spiritual." Hubungan yang tepat adalah ...',
+          options: [
+            'Pernyataan benar, alasan benar, dan keduanya berhubungan',
+            'Pernyataan benar, alasan benar, tetapi tidak berhubungan',
+            'Pernyataan benar, alasan salah',
+            'Pernyataan salah, alasan benar',
+            'Pernyataan dan alasan salah'
+          ],
+          correct: [0],
+          explanation: 'Laudato Si’ menegaskan krisis ekologi berkaitan erat dengan krisis moral dan spiritual, sehingga pertobatan ekologis menjadi keharusan. Keduanya berhubungan.'
+        },
+        {
+          type: 'multiple',
+          question: 'Aksi nyata gerakan ekopastoral KWI antara lain ... (Pilih lebih dari satu)',
+          options: [
+            'Menanam pohon bersama umat',
+            'Menghemat penggunaan air dan listrik',
+            'Membakar sampah plastik di lingkungan gereja',
+            'Memilah sampah organik dan anorganik',
+            'Mengadakan katekese tentang kepedulian lingkungan'
+          ],
+          correct: [0, 1, 3, 4],
+          explanation: 'Ekopastoral KWI mendorong aksi nyata seperti menanam pohon, hemat energi, memilah sampah, dan katekese lingkungan. Membakar sampah plastik justru mencemari udara.'
+        },
+        {
+          type: 'combination',
+          question: 'Pernyataan tentang Kompendium Ajaran Sosial Gereja mengenai lingkungan! (1) Alam adalah ciptaan Allah yang memiliki nilai intrinsik. (2) Manusia bebas mengeksploitasi alam sebebas-bebasnya. (3) Kepedulian lingkungan adalah bagian dari ajaran sosial Gereja. (4) Generasi mendatang berhak atas bumi yang layak huni. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 3, dan 4',
+            '1 dan 2',
+            '2 dan 4',
+            '4 saja',
+            'Semua benar'
+          ],
+          correct: [0],
+          explanation: 'Kompendium ASG menegaskan alam memiliki nilai intrinsik, kepedulian lingkungan adalah bagian ajaran sosial, dan generasi mendatang berhak atas bumi layak. Eksploitasi bebas bertentangan dengan ajaran Gereja.'
+        },
+        {
+          type: 'cause',
+          question: 'Pernyataan: "Pencemaran udara melanggar hak generasi mendatang." Alasan: "Laudato Si’ menekankan solidaritas antar generasi dalam menjaga bumi." Hubungan yang tepat adalah ...',
+          options: [
+            'Pernyataan benar, alasan benar, dan keduanya berhubungan',
+            'Pernyataan benar, alasan benar, tetapi tidak berhubungan',
+            'Pernyataan benar, alasan salah',
+            'Pernyataan salah, alasan benar',
+            'Pernyataan dan alasan salah'
+          ],
+          correct: [0],
+          explanation: 'Laudato Si’ menegaskan solidaritas antar generasi, sehingga pencemaran udara yang merusak bumi melanggar hak generasi mendatang. Keduanya berkaitan.'
+        },
+        {
+          type: 'multiple',
+          question: 'Manakah yang mencerminkan pertobatan ekologis dalam kehidupan sehari-hari? (Pilih lebih dari satu)',
+          options: [
+            'Menggunakan plastik sekali pakai sebanyak mungkin',
+            'Membiasakan diri membawa botol minum sendiri',
+            'Mendukung produk ramah lingkungan',
+            'Membuang sampah ke sungai',
+            'Mengurangi konsumsi daging berlebihan'
+          ],
+          correct: [1, 2, 4],
+          explanation: 'Pertobatan ekologis berarti mengubah gaya hidup: membawa botol sendiri, mendukung produk ramah lingkungan, dan mengurangi konsumsi berlebihan. Penggunaan plastik berlebihan dan membuang sampah ke sungai merusak lingkungan.'
+        },
+        {
+          type: 'combination',
+          question: 'Pernyataan tentang hubungan manusia dan alam menurut pesan Alkitab! (1) Manusia adalah gambar Allah yang dipercaya memelihara ciptaan. (2) Alam adalah sesama ciptaan yang harus dihormati. (3) Manusia boleh memperlakukan alam sesuka hati. (4) Keharmonisan alam rusak karena dosa manusia. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 2, dan 4',
+            '1 dan 3',
+            '2 dan 4',
+            '4 saja',
+            'Semua benar'
+          ],
+          correct: [0],
+          explanation: 'Alkitab menegaskan manusia sebagai gambar Allah yang memelihara ciptaan, alam sesama ciptaan yang dihormati, dan dosa manusia merusak keharmonisan. Memperlakukan alam sesuka hati bertentangan dengan mandat.'
+        },
+        {
+          type: 'cause',
+          question: 'Pernyataan: "Konsumerisme berlebihan memperparah krisis ekologi." Alasan: "Laudato Si’ mengkritik gaya hidup konsumtif yang merusak bumi." Hubungan yang tepat adalah ...',
+          options: [
+            'Pernyataan benar, alasan benar, dan keduanya berhubungan',
+            'Pernyataan benar, alasan benar, tetapi tidak berhubungan',
+            'Pernyataan benar, alasan salah',
+            'Pernyataan salah, alasan benar',
+            'Pernyataan dan alasan salah'
+          ],
+          correct: [0],
+          explanation: 'Laudato Si’ secara khusus mengkritik konsumerisme sebagai penyebab krisis ekologi. Keduanya saling terkait.'
+        },
+        {
+          type: 'multiple',
+          question: 'Peran Gereja dalam memperjuangkan keutuhan lingkungan hidup meliputi ... (Pilih lebih dari satu)',
+          options: [
+            'Mengajarkan katekese tentang ekologi',
+            'Mengadakan aksi bersih-bersih lingkungan',
+            'Membiarkan umat merusak alam demi pembangunan',
+            'Mendorong kebijakan pro-lingkungan',
+            'Menjadi teladan dalam pengelolaan sampah'
+          ],
+          correct: [0, 1, 3, 4],
+          explanation: 'Gereja berperan melalui katekese ekologi, aksi nyata, dorongan kebijakan pro-lingkungan, dan teladan pengelolaan sampah. Membiarkan perusakan alam bertentangan dengan misi Gereja.'
+        },
+        {
+          type: 'combination',
+          question: 'Pernyataan tentang "rumah kita bersama" dalam Laudato Si’! (1) Bumi adalah rumah bagi semua makhluk. (2) Hanya manusia yang berhak menikmati bumi. (3) Kita dipanggil untuk merawat rumah bersama. (4) Kerusakan bumi berdampak pada kaum miskin. Pernyataan yang benar adalah ...',
+          options: [
+            '1, 3, dan 4',
+            '1 dan 2',
+            '2 dan 4',
+            '4 saja',
+            'Semua benar'
+          ],
+          correct: [0],
+          explanation: 'Laudato Si’ menegaskan bumi rumah semua makhluk, panggilan merawat, dan dampak kerusakan pada kaum miskin. Pernyataan (2) salah karena bumi untuk semua makhluk.'
+        }
+      ];
+
+      // ========== RENDER KUIS ==========
+      const quizContainer = document.getElementById('quizContainer');
+      const scoreDisplay = document.getElementById('scoreDisplay');
+      const progressDisplay = document.getElementById('progressDisplay');
+      const resetAllBtn = document.getElementById('resetAllBtn');
+
+      // State: menyimpan jawaban & status penilaian per soal
+      const userAnswers = new Array(questions.length).fill(null).map(() => ({
+        selected: [],
+        checked: false,
+        isCorrect: false
+      }));
+
+      // Helper: format label opsi (A, B, C, ...)
+      const letterLabel = (idx) => String.fromCharCode(65 + idx);
+
+      // Render semua soal
+      function renderQuiz() {
+        let html = '';
+        questions.forEach((q, qIndex) => {
+          const ans = userAnswers[qIndex];
+          const isChecked = ans.checked;
+          const selected = ans.selected;
+
+          // Tipe soal label
+          let typeLabel = '';
+          if (q.type === 'multiple') typeLabel = 'Pilih lebih dari satu';
+          else if (q.type === 'combination') typeLabel = 'Pilih kombinasi';
+          else if (q.type === 'cause') typeLabel = 'Sebab-Akibat';
+
+          html += `<div class="card" id="card-${qIndex}" data-qindex="${qIndex}">`;
+          html += `<div class="question-header">
+            <span class="question-number">Soal ${qIndex + 1}</span>
+            <span class="question-type">${typeLabel}</span>
+          </div>`;
+          html += `<div class="question-text">${q.question}</div>`;
+          html += `<div class="options">`;
+
+          q.options.forEach((opt, optIndex) => {
+            const isSelected = selected.includes(optIndex);
+            const showCorrect = isChecked && q.correct.includes(optIndex);
+            const showWrong = isChecked && isSelected && !q.correct.includes(optIndex);
+            let optClass = 'option';
+            if (showCorrect) optClass += ' correct-highlight';
+            else if (showWrong) optClass += ' wrong-highlight';
+
+            html += `<div class="${optClass}" data-optindex="${optIndex}">
+              <input type="checkbox" id="q${qIndex}opt${optIndex}" value="${optIndex}" ${isSelected ? 'checked' : ''} ${isChecked ? 'disabled' : ''}>
+              <label for="q${qIndex}opt${optIndex}">${letterLabel(optIndex)}. ${opt}</label>
+            </div>`;
+          });
+
+          html += `</div>`;
+
+          // Tombol periksa (jika belum dinilai)
+          if (!isChecked) {
+            html += `<button class="btn-check check-btn" data-qindex="${qIndex}">Periksa Jawaban</button>`;
+            html += `<div class="empty-msg" id="empty-${qIndex}" style="display:none;">Pilih setidaknya satu jawaban!</div>`;
+          } else {
+            // Tampilkan feedback
+            const correctLetters = q.correct.map(i => letterLabel(i)).join(', ');
+            const statusText = ans.isCorrect ? '✅ Jawaban Benar!' : '❌ Jawaban Kurang Tepat';
+            html += `<div class="feedback">
+              <strong>${statusText}</strong><br>
+              <span>Kunci: ${correctLetters}</span><br>
+              <span>${q.explanation}</span>
+            </div>`;
+          }
+
+          html += `</div>`;
+        });
+
+        quizContainer.innerHTML = html;
+        updateStats();
+
+        // Pasang event listener untuk checkbox
+        document.querySelectorAll('.option input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', function(e) {
+            const card = this.closest('.card');
+            const qIndex = parseInt(card.dataset.qindex);
+            const optIndex = parseInt(this.value);
+            const ans = userAnswers[qIndex];
+            if (ans.checked) return; // sudah dinilai, tidak bisa diubah
+
+            if (this.checked) {
+              if (!ans.selected.includes(optIndex)) ans.selected.push(optIndex);
+            } else {
+              ans.selected = ans.selected.filter(i => i !== optIndex);
+            }
+            // Sembunyikan pesan empty
+            const emptyMsg = document.getElementById(`empty-${qIndex}`);
+            if (emptyMsg) emptyMsg.style.display = 'none';
+          });
+        });
+
+        // Pasang event listener tombol periksa
+        document.querySelectorAll('.check-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const qIndex = parseInt(this.dataset.qindex);
+            checkAnswer(qIndex);
+          });
+        });
+      }
+
+      // Periksa jawaban satu soal
+      function checkAnswer(qIndex) {
+        const q = questions[qIndex];
+        const ans = userAnswers[qIndex];
+        if (ans.checked) return;
+
+        if (ans.selected.length === 0) {
+          const emptyMsg = document.getElementById(`empty-${qIndex}`);
+          if (emptyMsg) emptyMsg.style.display = 'block';
+          return;
+        }
+
+        // Tentukan benar jika himpunan selected sama dengan correct
+        const correctSet = new Set(q.correct);
+        const selectedSet = new Set(ans.selected);
+        const isCorrect = correctSet.size === selectedSet.size && [...correctSet].every(v => selectedSet.has(v));
+
+        ans.checked = true;
+        ans.isCorrect = isCorrect;
+
+        // Render ulang kartu ini saja? Lebih mudah render ulang seluruh kuis untuk konsistensi
+        renderQuiz();
+      }
+
+      // Update skor & progress
+      function updateStats() {
+        const checkedCount = userAnswers.filter(a => a.checked).length;
+        const correctCount = userAnswers.filter(a => a.checked && a.isCorrect).length;
+        scoreDisplay.textContent = `Skor: ${correctCount} / 30`;
+        progressDisplay.textContent = `${checkedCount} soal dinilai`;
+      }
+
+      // Reset semua jawaban
+      function resetAll() {
+        for (let i = 0; i < userAnswers.length; i++) {
+          userAnswers[i] = { selected: [], checked: false, isCorrect: false };
+        }
+        renderQuiz();
+      }
+
+      // Inisialisasi
+      renderQuiz();
+
+      // Event reset all
+      resetAllBtn.addEventListener('click', resetAll);
+    })();
+  </script>
+</body>
+</html>
